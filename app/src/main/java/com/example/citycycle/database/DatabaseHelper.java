@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.citycycle.helpers.LoginResult;
 import com.example.citycycle.models.Cycle;
@@ -129,6 +130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         insertStationData(db);
         insertBikeData(db);
+        insertSampleData(db);
 
     }
 
@@ -139,6 +141,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BIKES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RENTALS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROMOTION);
         onCreate(db);
     }
 
@@ -214,17 +217,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String yesterday = simpleDateFormat.format(calendar.getTime());
 
         // Query to select promotions where startDate >= yesterday and endDate <= yesterday
-        String query = "SELECT * FROM " + TABLE_PROMOTION +
-                " WHERE " + COL_PROMO_START_DATE + " >= ? AND " +
-                COL_PROMO_END_DATE + " <= ?";
+        String query = "SELECT * FROM " + TABLE_PROMOTION ;
+//                " WHERE " + COL_PROMO_START_DATE + " >= ? AND " +
+//                COL_PROMO_END_DATE + " <= ?";
 
         List<Promotion> promotions= new ArrayList<>();
         Cursor cursor = null;
 
         try {
-            cursor = db.rawQuery(query,new String[]{yesterday,yesterday});
+            cursor = db.rawQuery(query,new String[]{});
+            Log.d("test","hellooooomko");
             if(cursor.moveToFirst()){
                 do {
+
                     int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_PROMO_ID));
                     String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_PROMO_TITLE));
                     String description = cursor.getString(cursor.getColumnIndexOrThrow(COL_PROMO_DESCRIPTION));
@@ -236,6 +241,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }while (cursor.moveToNext());
             }
         } catch (Exception e) {
+            Log.d("test",e.toString());
             throw new RuntimeException(e);
         }
         finally {
@@ -338,6 +344,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.insert(TABLE_BIKES, null, values);
             values.clear();  // Clear previous values to avoid conflicts
         }
+    }
+
+    private void insertSampleData(SQLiteDatabase db) {
+        // Insert sample promotion data
+        String insertSampleData1 = "INSERT INTO " + TABLE_PROMOTION + " (" +
+                COL_PROMO_TITLE + ", " +
+                COL_PROMO_DESCRIPTION + ", " +
+                COL_PROMO_START_DATE + ", " +
+                COL_PROMO_END_DATE + ", " +
+                COL_PROMO_IMG + ") VALUES (" +
+                "'Winter Sale', " +
+                "'Get up to 50% off on all products during our Winter Sale.', " +
+                "'2025-01-01', " +
+                "'2025-01-15', " +
+                "'prom_img')";  // 'winter_sale_image' is the image name stored in the database
+
+        String insertSampleData2 = "INSERT INTO " + TABLE_PROMOTION + " (" +
+                COL_PROMO_TITLE + ", " +
+                COL_PROMO_DESCRIPTION + ", " +
+                COL_PROMO_START_DATE + ", " +
+                COL_PROMO_END_DATE + ", " +
+                COL_PROMO_IMG + ") VALUES (" +
+                "'Summer Offer', " +
+                "'Get 30% off on all items during our Summer Offer.', " +
+                "'2025-06-01', " +
+                "'2025-06-30', " +
+                "'prom_img')";  // 'summer_offer_image' is the image name stored in the database
+
+        db.execSQL(insertSampleData1);
+        db.execSQL(insertSampleData2);
+        Log.d("Promotion","created");
     }
 }
 

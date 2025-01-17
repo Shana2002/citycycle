@@ -31,7 +31,7 @@
                 android:id="@+id/textView10"
                 android:layout_width="247dp"
                 android:layout_height="41dp"
-                android:fontFamily="@font/altehaasgroteskbold"
+                android:fontFamily="@font/AlteHaasGroteskBold"
                 android:maxWidth="218dp"
                 android:maxLines="@integer/material_motion_duration_long_2"
                 android:textSize="15dp"

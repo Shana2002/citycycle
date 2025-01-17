@@ -73,7 +73,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/promtion_view"
         android:layout_width="391dp"
         android:layout_height="141dp"
         android:layout_marginTop="16dp"
@@ -88,7 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:fontFamily="@font/altehaasgroteskbold"
+        android:fontFamily="@font/popins_extrabold"
         android:text="Latest Arrivals"
         android:textColor="@color/black"
         android:textSize="20dp"
@@ -96,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.062"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/promtion_view"
         app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
