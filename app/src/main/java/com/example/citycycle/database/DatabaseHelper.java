@@ -294,6 +294,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }while (cursor.moveToNext());
             }
         } catch (Exception e) {
+            Log.d("test",e.toString());
             throw new RuntimeException(e);
         }finally {
             db.close();
@@ -339,7 +340,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(COL_BIKE_TYPE, bikeTypes[i % bikeTypes.length]); // Alternating bike types
             values.put(COL_BIKE_STATUS, bikeStatuses[i % bikeStatuses.length]); // Alternating bike statuses
             values.put(COL_BIKE_STATION_ID, (i % 10) + 1); // Assigning station IDs between 1 and 10
-            values.put(COL_BIKE_IMAGES, "image" + i + ".jpg");
+            values.put(COL_BIKE_IMAGES, "cycle1,");
 
             db.insert(TABLE_BIKES, null, values);
             values.clear();  // Clear previous values to avoid conflicts

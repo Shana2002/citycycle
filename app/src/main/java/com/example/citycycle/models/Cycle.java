@@ -1,5 +1,7 @@
 package com.example.citycycle.models;
 
+import android.content.Context;
+
 import com.example.citycycle.helpers.BikeType;
 import com.example.citycycle.helpers.CycleStatus;
 
@@ -20,5 +22,12 @@ public class Cycle {
         this.images = images;
         this.type = BikeType.fromString(type);
         this.status = CycleStatus.fromString(status);
+    }
+
+    public int resourceFile(Context context) {
+        // Use reflection to dynamically fetch the resource ID from R.drawable
+        String imageName = this.images[0]; // This is the image name (e.g., "my_image")
+        int resId = context.getResources().getIdentifier(imageName, "drawable", context.getPackageName());
+        return resId; // Returns the resource ID
     }
 }

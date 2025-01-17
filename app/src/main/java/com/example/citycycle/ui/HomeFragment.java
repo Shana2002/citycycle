@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.citycycle.R;
+import com.example.citycycle.adapters.CycleAdapter;
 import com.example.citycycle.adapters.PromotionViewAdapterHorizontal;
 import com.example.citycycle.database.DatabaseHelper;
+import com.example.citycycle.helpers.VerticalSpaceItemDecoration;
 
 public class HomeFragment extends Fragment {
     @Nullable
@@ -37,22 +39,34 @@ public class HomeFragment extends Fragment {
             return insets;
         });
         Log.d("test","hello");
-//         database helper
+        //   database helper
         DatabaseHelper db = new DatabaseHelper(requireContext());
         SQLiteDatabase sql = db.getReadableDatabase();
-        Log.d("test","hello1");
-        Log.d("test", String.valueOf(db.getPromotions().size()));
-////
-        RecyclerView recyclerView = view.findViewById(R.id.promtion_view);
+
+        // recycle veiws
+        RecyclerView recyclerViewPromotion = view.findViewById(R.id.promtion_view);
+        RecyclerView recyclerViewCycle = view.findViewById(R.id.cycle_view);
+
+        // promotion view setup
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false);
-        recyclerView.setLayoutManager(layoutManager);
-        Log.d("test","hello2332");
-//
-//
-        Log.d("test", String.valueOf(db.getPromotions().size()));
+        recyclerViewPromotion.setLayoutManager(layoutManager);
         PromotionViewAdapterHorizontal adapter = new PromotionViewAdapterHorizontal(db.getPromotions(),requireContext());
-        recyclerView.setAdapter(adapter);
-        Log.d("test","hellosdada");
+        recyclerViewPromotion.setAdapter(adapter);
+
+        Log.d("test",String.valueOf(db.getCycle(null,null,null,true).size()));
+        // cycle view setup
+        LinearLayoutManager layoutManagerCycle = new LinearLayoutManager(requireContext());
+        recyclerViewCycle.setLayoutManager(layoutManagerCycle);
+
+//        int verticalPaddingInPixels = (int) (500 * getResources().getDisplayMetrics().density);
+//
+//// Add customized ItemDecoration
+//        recyclerViewCycle.addItemDecoration(new VerticalSpaceItemDecoration(verticalPaddingInPixels));
+
+// Set adapter
+
+        CycleAdapter cycleAdapter = new CycleAdapter(db.getCycle(null,null,null,true),requireContext());
+        recyclerViewCycle.setAdapter(cycleAdapter);
     }
 
 }

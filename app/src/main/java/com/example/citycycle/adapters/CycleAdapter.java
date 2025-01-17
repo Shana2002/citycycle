@@ -1,6 +1,7 @@
 package com.example.citycycle.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class CycleAdapter extends RecyclerView.Adapter<CycleAdapter.ViewHolderCy
     Context context;
 
     public CycleAdapter(List<Cycle> cycles,Context context){
+        Log.d("test","hello11111");
         this.cycles = cycles;
         this.context = context;
     };
@@ -30,6 +32,7 @@ public class CycleAdapter extends RecyclerView.Adapter<CycleAdapter.ViewHolderCy
     @NonNull
     @Override
     public ViewHolderCycle onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d("test","hello111dsd11");
         // Inflate the item layout
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_cycle, parent, false);
         return new ViewHolderCycle(view); // Return a new ViewHolder instance
@@ -37,9 +40,10 @@ public class CycleAdapter extends RecyclerView.Adapter<CycleAdapter.ViewHolderCy
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderCycle holder, int position) {
+        Log.d("test","hello11111dsdds");
         Cycle cycle = cycles.get(position);
-
-
+        holder.title.setText(cycle.title);
+        holder.location.setText(cycle.station);
     }
 
     @Override
@@ -49,13 +53,14 @@ public class CycleAdapter extends RecyclerView.Adapter<CycleAdapter.ViewHolderCy
 
 
     public static class ViewHolderCycle extends RecyclerView.ViewHolder {
-        TextView title,description;
+        TextView title,location;
         ImageView imageView;
 
         public ViewHolderCycle(View itemView) {
             super(itemView);
-
-
+            title = itemView.findViewById(R.id.title);
+            location = itemView.findViewById(R.id.location);
+//            imageView = itemView.findViewById(R.id.imageView);
         }
     }
 }
