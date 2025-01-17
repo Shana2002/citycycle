@@ -1,8 +1,15 @@
 package com.example.citycycle.database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.citycycle.helpers.LoginResult;
+import com.example.citycycle.models.User;
+
+import java.sql.Blob;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -23,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_USER_PASSWORD = "password";
     private static final String COL_USER_PHONE = "phone";
     private static final String COL_USER_PAYMENT = "payment_info";
+    private static final String COL_USER_IMAGE = "user_image";
 
     // Bikes Table Columns
     private static final String COL_BIKE_ID = "bike_id";
@@ -57,7 +65,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_USER_EMAIL + " TEXT UNIQUE, " +
                 COL_USER_PASSWORD + " TEXT, " +
                 COL_USER_PHONE + " TEXT, " +
-                COL_USER_PAYMENT + " TEXT)";
+                COL_USER_PAYMENT + " TEXT," +
+                COL_USER_IMAGE + " BLOB)";
 
         String createBikesTable = "CREATE TABLE " + TABLE_BIKES + " (" +
                 COL_BIKE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -96,7 +105,65 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public  boolean insertUser(){
-        return  false;
+    public  boolean insertUser(User user){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_USER_NAME,user.getName());
+        values.put(COL_USER_EMAIL,user.getEmail());
+        values.put(COL_USER_PASSWORD,user.getPassword());
+        long result = db.insert(TABLE_USERS,null,values);
+        return result != -1;
+    }
+
+    public LoginResult loginUser(User user){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+//        query
+        String query = "SELECT * FROM "+TABLE_USERS+" WHERE "+COL_USER_EMAIL+ " = ?";
+
+//        excute quey
+        try (Cursor cursor = db.rawQuery(query,new String[]{user.getEmail()})){
+            if (cursor != null && cursor.moveToFirst()){
+//                get db password
+                String storedPassword = cursor.getString(cursor.getColumnIndexOrThrow(COL_USER_PASSWORD));
+//                check password correct or  not
+                if (user.getPassword().equals(storedPassword)){
+                    return LoginResult.SUCCESS;
+                }
+                else{
+                    return LoginResult.INCORRECT_PASSWORD;
+                }
+            }
+            return LoginResult.USER_NOT_FOUND;
+        } catch (Exception e) {
+            return LoginResult.ERROR;
+        }
+        finally {
+            db.close();
+        }
+    }
+    public User getLoginUserDetails(String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT * FROM "+TABLE_USERS + " WHERE " + COL_USER_EMAIL + " = ?";
+
+        try (Cursor cursor = db.rawQuery(query,new String[]{email})){
+            if (cursor != null && cursor.moveToFirst()){
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_USER_ID));
+                String userEmail = cursor.getString(cursor.getColumnIndexOrThrow(COL_USER_EMAIL));
+                String userName = cursor.getString(cursor.getColumnIndexOrThrow(COL_USER_NAME));
+                String userPasswrod = cursor.getString(cursor.getColumnIndexOrThrow(COL_USER_PASSWORD));
+                String userPhone = cursor.getString(cursor.getColumnIndexOrThrow(COL_USER_PHONE));
+                String userPayment = cursor.getString(cursor.getColumnIndexOrThrow(COL_USER_PAYMENT));
+                byte[] userImage = cursor.getBlob(cursor.getColumnIndexOrThrow(COL_USER_IMAGE));
+
+                return new User(id,userName,userEmail,userPasswrod,userPhone,userPayment,userImage);
+            }
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+          db.close();
+        }
     }
 }
