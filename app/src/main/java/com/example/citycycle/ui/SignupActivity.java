@@ -58,8 +58,8 @@ public class SignupActivity extends AppCompatActivity {
                 }else{
                     User logUser = new User();
                     logUser.setName(name.getText().toString());
-                    logUser.setEmail(name.getText().toString());
-                    logUser.setPassword(name.getText().toString());
+                    logUser.setEmail(email.getText().toString());
+                    logUser.setPassword(password.getText().toString());
 
                     if (db.insertUser(logUser)){
                         Toast.makeText(SignupActivity.this, "User created", Toast.LENGTH_SHORT).show();

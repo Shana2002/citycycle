@@ -17,6 +17,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.citycycle.MainActivity;
 import com.example.citycycle.R;
+import com.example.citycycle.database.DatabaseHelper;
+import com.example.citycycle.helpers.LoginResult;
+import com.example.citycycle.models.User;
 
 import org.w3c.dom.Text;
 
@@ -31,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        DatabaseHelper db = new DatabaseHelper(this);
+
 //        varible decleration
         TextView sign_button = findViewById(R.id.sign_button);
         TextView login_button = findViewById(R.id.login_btn);
@@ -54,10 +59,26 @@ public class LoginActivity extends AppCompatActivity {
                 if (email.getText().toString().isEmpty() || passwrod.getText().toString().isEmpty()){
                     Toast.makeText(LoginActivity.this, "All field required", Toast.LENGTH_SHORT).show();
                 } else if (!email.getText().toString().matches(emailPattern)) {
-                    Toast.makeText(LoginActivity.this, "All field required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Email type worng", Toast.LENGTH_SHORT).show();
+                } else {
+                    User loginUser = new User();
+                    loginUser.setEmail(email.getText().toString());
+                    loginUser.setPassword(passwrod.getText().toString());
+                    LoginResult result = db.loginUser(loginUser);
+                    if (result == LoginResult.ERROR) {
+                        Toast.makeText(LoginActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
+                    } else if (result == LoginResult.USER_NOT_FOUND) {
+                        Toast.makeText(LoginActivity.this, "User not found", Toast.LENGTH_SHORT).show();
+                    } else if (result == LoginResult.INCORRECT_PASSWORD) {
+                        Toast.makeText(LoginActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
+                    } else if (result==LoginResult.SUCCESS) {
+                        Toast.makeText(LoginActivity.this, "Login Successfull", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
                 }
 
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
             }
         });
     }
