@@ -36,14 +36,14 @@ public class LoginActivity extends AppCompatActivity {
         });
         DatabaseHelper db = new DatabaseHelper(this);
 
-//        varible decleration
+        // varible decleration
         TextView sign_button = findViewById(R.id.sign_button);
         TextView login_button = findViewById(R.id.login_btn);
         EditText email = findViewById(R.id.email);
         EditText passwrod = findViewById(R.id.password);
         String emailPattern = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
-//        sing button function
+        // sing button function
         sign_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-//      login button click
+        // login button click
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,8 +77,6 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 }
-
-
             }
         });
     }

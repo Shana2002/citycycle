@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
-        android:layout_width="392dp"
-        android:layout_height="87dp"
+        android:layout_width="394dp"
+        android:layout_height="149dp"
         android:background="@drawable/top_bar_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,10 +23,10 @@
             android:layout_height="58dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.107"
+            app:layout_constraintHorizontal_bias="0.099"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.448"
+            app:layout_constraintVertical_bias="0.75"
             app:srcCompat="@drawable/profile_circle" />
 
         <TextView
@@ -38,10 +39,10 @@
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.03"
+            app:layout_constraintHorizontal_bias="0.029"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.191" />
+            app:layout_constraintVertical_bias="0.523" />
 
         <TextView
             android:id="@+id/textView5"
@@ -53,10 +54,10 @@
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.028"
+            app:layout_constraintHorizontal_bias="0.029"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4"
-            app:layout_constraintVertical_bias="0.555" />
+            app:layout_constraintVertical_bias="0.465" />
 
         <ImageView
             android:id="@+id/imageView5"
@@ -64,10 +65,10 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.917"
+            app:layout_constraintHorizontal_bias="0.916"
             app:layout_constraintStart_toEndOf="@+id/textView4"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.347"
+            app:layout_constraintVertical_bias="0.753"
             app:srcCompat="@drawable/notification" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -100,8 +101,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"
-        android:layout_width="395dp"
-        android:layout_height="500dp"
+        android:layout_width="391dp"
+        android:layout_height="440dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

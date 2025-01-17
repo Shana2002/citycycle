@@ -9,6 +9,7 @@
 
 
     <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="391dp"
         android:layout_height="827dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,4 +18,74 @@
         app:layout_constraintTop_toTopOf="parent">
 
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/custom_bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/custom_nav_background"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:gravity="center">
+
+        <!-- Search Icon -->
+        <ImageView
+            android:id="@+id/nav_search"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_search"
+            android:contentDescription="Search"
+            android:background="@drawable/icon_background"
+            android:padding="12dp"
+            android:clickable="true"
+            android:layout_marginHorizontal="20dp"
+            android:focusable="true" />
+
+        <!-- Bike Icon -->
+        <ImageView
+            android:id="@+id/nav_bike"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_bike"
+            android:contentDescription="Bike"
+            android:background="@drawable/icon_background"
+            android:padding="12dp"
+            android:layout_marginHorizontal="20dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- Settings Icon -->
+        <ImageView
+            android:id="@+id/nav_settings"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_promo"
+            android:contentDescription="Settings"
+            android:background="@drawable/icon_background"
+            android:padding="12dp"
+            android:layout_marginHorizontal="20dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- Profile Icon -->
+        <ImageView
+            android:id="@+id/nav_profile"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_profile"
+            android:contentDescription="Profile"
+            android:background="@drawable/icon_background"
+            android:padding="12dp"
+            android:layout_marginHorizontal="20dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
