@@ -7,9 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.citycycle.helpers.LoginResult;
+import com.example.citycycle.models.Cycle;
+import com.example.citycycle.models.Promotion;
 import com.example.citycycle.models.User;
 
 import java.sql.Blob;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -22,6 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_BIKES = "Bikes";
     private static final String TABLE_STATIONS = "Stations";
     private static final String TABLE_RENTALS = "Rentals";
+    private static final String TABLE_PROMOTION = "promotions";
 
     // Users Table Columns
     private static final String COL_USER_ID = "user_id";
@@ -34,9 +42,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Bikes Table Columns
     private static final String COL_BIKE_ID = "bike_id";
+    private static final String COL_BIKE_TITLE = "title";
+    private static final String COL_BIKE_DESCRIPTION = "description";
     private static final String COL_BIKE_TYPE = "type";
     private static final String COL_BIKE_STATUS = "status";
     private static final String COL_BIKE_STATION_ID = "station_id";
+    private static final String COL_BIKE_IMAGES = "images";
+
 
     // Stations Table Columns
     private static final String COL_STATION_ID = "station_id";
@@ -52,6 +64,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_RENTAL_START_TIME = "rental_start_time";
     private static final String COL_RENTAL_END_TIME = "rental_end_time";
     private static final String COL_RENTAL_COST = "total_cost";
+
+    // Promotion Table Colums
+    private static final String COL_PROMO_ID = "promotion_id";
+    private static final String COL_PROMO_TITLE = "title";
+    private static final String COL_PROMO_DESCRIPTION = "description";
+    private static final String COL_PROMO_START_DATE = "start_date";
+    private static final String COL_PROMO_END_DATE = "end_date";
+    private static final String COL_PROMO_IMG = "image";
 
     public DatabaseHelper(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -70,8 +90,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String createBikesTable = "CREATE TABLE " + TABLE_BIKES + " (" +
                 COL_BIKE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_BIKE_TITLE + " TEXT, " +
+                COL_BIKE_DESCRIPTION + " TEXT, " +
                 COL_BIKE_TYPE + " TEXT, " +
                 COL_BIKE_STATUS + " TEXT, " +
+                COL_BIKE_IMAGES + " TEXT, " +
                 COL_BIKE_STATION_ID + " INTEGER)";
 
         String createStationsTable = "CREATE TABLE " + TABLE_STATIONS + " (" +
@@ -89,10 +112,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_RENTAL_END_TIME + " TEXT, " +
                 COL_RENTAL_COST + " REAL)";
 
+        String createPromotionTable = "CREATE TABLE " + TABLE_PROMOTION + "("+
+                COL_PROMO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_PROMO_TITLE +  " TEXT, " +
+                COL_PROMO_DESCRIPTION +  " TEXT, " +
+                COL_PROMO_START_DATE +  " TEXT, " +
+                COL_PROMO_END_DATE +  " TEXT, "+
+                COL_PROMO_IMG + " TEXT )";
+
+
         db.execSQL(createUsersTable);
         db.execSQL(createBikesTable);
         db.execSQL(createStationsTable);
         db.execSQL(createRentalsTable);
+        db.execSQL(createPromotionTable);
+
+        insertStationData(db);
+        insertBikeData(db);
+
     }
 
     @Override
@@ -166,4 +203,141 @@ public class DatabaseHelper extends SQLiteOpenHelper {
           db.close();
         }
     }
+
+    public List<Promotion> getPromotions(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // get yesteday
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE,-1);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String yesterday = simpleDateFormat.format(calendar.getTime());
+
+        // Query to select promotions where startDate >= yesterday and endDate <= yesterday
+        String query = "SELECT * FROM " + TABLE_PROMOTION +
+                " WHERE " + COL_PROMO_START_DATE + " >= ? AND " +
+                COL_PROMO_END_DATE + " <= ?";
+
+        List<Promotion> promotions= new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(query,new String[]{yesterday,yesterday});
+            if(cursor.moveToFirst()){
+                do {
+                    int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_PROMO_ID));
+                    String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_PROMO_TITLE));
+                    String description = cursor.getString(cursor.getColumnIndexOrThrow(COL_PROMO_DESCRIPTION));
+                    String startDate = cursor.getString(cursor.getColumnIndexOrThrow(COL_PROMO_START_DATE));
+                    String endDate = cursor.getString(cursor.getColumnIndexOrThrow(COL_PROMO_END_DATE));
+                    String image = cursor.getString(cursor.getColumnIndexOrThrow(COL_PROMO_IMG));
+
+                    promotions.add(new Promotion(id,name,description,startDate,endDate,image));
+                }while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            db.close();
+        }
+        return promotions;
+    }
+
+    public List<Cycle> getCycle(String location,String start_date , String end_date , Boolean available){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT b.*, s." + COL_STATION_LOCATION +
+                " FROM " + TABLE_BIKES + " AS b " +
+                "LEFT JOIN " + TABLE_STATIONS + " AS s ON b." + COL_BIKE_STATION_ID + " = s." + COL_STATION_ID +
+                " LEFT JOIN " + TABLE_RENTALS + " AS r ON b." + COL_BIKE_ID + " = r." + COL_RENTAL_BIKE_ID +
+                " WHERE 1=1";
+
+        List<String> args = new ArrayList<>();
+
+        if (location != null) {
+            query += " AND s." + COL_STATION_LOCATION + " = ?";
+            args.add(location);
+        }
+        if (start_date != null && end_date != null) {
+            query += " AND (r." + COL_RENTAL_END_TIME + " IS NULL OR (r." + COL_RENTAL_END_TIME + " < ? OR r." + COL_RENTAL_START_TIME + " > ?))";
+            args.add(end_date);
+            args.add(start_date);
+        }
+        if (available) {
+            query += " AND b." + COL_BIKE_STATUS + " = ?";
+            args.add("Available");
+        }
+
+        List<Cycle> cycles = new ArrayList<>();
+        Cursor cursor = null;
+        try{
+            cursor = db.rawQuery(query,args.toArray(new String[0]));
+            if (cursor.moveToFirst()){
+                do {
+                    int bikeId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_BIKE_ID));
+                    String bikeTitle = cursor.getString(cursor.getColumnIndexOrThrow(COL_BIKE_TITLE));
+                    String bikeDescription = cursor.getString(cursor.getColumnIndexOrThrow(COL_BIKE_DESCRIPTION));
+                    String bikeType = cursor.getString(cursor.getColumnIndexOrThrow(COL_BIKE_TYPE));
+                    String bikeStatus = cursor.getString(cursor.getColumnIndexOrThrow(COL_BIKE_STATUS));
+                    int stationId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_BIKE_STATION_ID));
+                    String stationLocation = cursor.getString(cursor.getColumnIndexOrThrow(COL_STATION_LOCATION));
+                    String imageString = cursor.getString(cursor.getColumnIndexOrThrow(COL_BIKE_IMAGES));
+                    String[] images = imageString.split("[,]");
+                    cycles.add(new Cycle(bikeId,bikeTitle,bikeDescription,bikeType,stationLocation,bikeStatus,images));
+                }while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }finally {
+            db.close();
+        }
+        return cycles;
+    }
+
+    // sample data
+
+    private void insertStationData(SQLiteDatabase db) {
+        ContentValues values = new ContentValues();
+
+        String[] locations = {
+                "Colombo 1", "Colombo 2", "Colombo 3", "Colombo 4", "Colombo 5",
+                "Kandy", "Galle", "Negombo", "Jaffna", "Matara"
+        };
+
+        for (int i = 0; i < locations.length; i++) {
+            values.put(COL_STATION_NAME, "Station " + (i + 1));
+            values.put(COL_STATION_LOCATION, locations[i]);
+            db.insert(TABLE_STATIONS, null, values);
+            values.clear();  // Clear previous values to avoid conflicts
+        }
+    }
+
+    private void insertBikeData(SQLiteDatabase db) {
+        ContentValues values = new ContentValues();
+
+        // Bike Types
+        String[] bikeTypes = {
+                "Road Bike", "City Bike", "Single Gear Bike", "Electric Bike", "Ladies Bike"
+        };
+
+        // Bike Status
+        String[] bikeStatuses = {
+                "Available", "Not Available", "Maintenance"
+        };
+
+        // Insert 20 sample bikes
+        for (int i = 1; i <= 20; i++) {
+            values.put(COL_BIKE_TITLE, "Bike " + i);
+            values.put(COL_BIKE_DESCRIPTION, "Description for Bike " + i);
+            values.put(COL_BIKE_TYPE, bikeTypes[i % bikeTypes.length]); // Alternating bike types
+            values.put(COL_BIKE_STATUS, bikeStatuses[i % bikeStatuses.length]); // Alternating bike statuses
+            values.put(COL_BIKE_STATION_ID, (i % 10) + 1); // Assigning station IDs between 1 and 10
+            values.put(COL_BIKE_IMAGES, "image" + i + ".jpg");
+
+            db.insert(TABLE_BIKES, null, values);
+            values.clear();  // Clear previous values to avoid conflicts
+        }
+    }
 }
+
