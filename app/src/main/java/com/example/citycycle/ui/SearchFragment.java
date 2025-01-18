@@ -20,13 +20,12 @@ import com.example.citycycle.R;
 import com.example.citycycle.adapters.CycleAdapter;
 import com.example.citycycle.adapters.PromotionViewAdapterHorizontal;
 import com.example.citycycle.database.DatabaseHelper;
-import com.example.citycycle.helpers.VerticalSpaceItemDecoration;
 
-public class HomeFragment extends Fragment {
+public class SearchFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main,container,false);
+        return inflater.inflate(R.layout.fragment_search,container,false);
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -38,27 +37,17 @@ public class HomeFragment extends Fragment {
             v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom);
             return insets;
         });
-        //   database helper
+
+//         database helper
         DatabaseHelper db = new DatabaseHelper(requireContext());
-        SQLiteDatabase sql = db.getReadableDatabase();
 
-        // recycle views
-        RecyclerView recyclerViewPromotion = view.findViewById(R.id.promtion_view);
-        RecyclerView recyclerViewCycle = view.findViewById(R.id.cycle_view);
+//         varibles
+        RecyclerView cycleView = view.findViewById(R.id.cycle_view);
 
-        // promotion view setup
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false);
-        recyclerViewPromotion.setLayoutManager(layoutManager);
-        PromotionViewAdapterHorizontal adapter = new PromotionViewAdapterHorizontal(db.getPromotions(),requireContext());
-        recyclerViewPromotion.setAdapter(adapter);
-
-        Log.d("test",String.valueOf(db.getCycle(null,null,null,true).size()));
-        // cycle view setup
-        LinearLayoutManager layoutManagerCycle = new LinearLayoutManager(requireContext());
-        recyclerViewCycle.setLayoutManager(layoutManagerCycle);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
+        cycleView.setLayoutManager(layoutManager);
 
         CycleAdapter cycleAdapter = new CycleAdapter(db.getCycle(null,null,null,true),requireContext());
-        recyclerViewCycle.setAdapter(cycleAdapter);
+        cycleView.setAdapter(cycleAdapter);
     }
-
 }

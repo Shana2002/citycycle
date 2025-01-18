@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.citycycle.database.DatabaseHelper;
 import com.example.citycycle.ui.HomeFragment;
+import com.example.citycycle.ui.SearchFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         search.setOnClickListener(v -> {
             activeTab(search);
-            loadFragment(new HomeFragment());
+            loadFragment(new SearchFragment());
         });
         bike.setOnClickListener(v -> {
             activeTab(bike);
