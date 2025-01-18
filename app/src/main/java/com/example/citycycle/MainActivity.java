@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.citycycle.database.DatabaseHelper;
 import com.example.citycycle.ui.HomeFragment;
+import com.example.citycycle.ui.ProfileFragment;
 import com.example.citycycle.ui.PromotionFragment;
 import com.example.citycycle.ui.SearchFragment;
 
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         });
         profile.setOnClickListener(v -> {
             activeTab(profile);
-            loadFragment(new HomeFragment());
+            loadFragment(new ProfileFragment());
         });
     }
 
