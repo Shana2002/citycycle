@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".ui.LoginActivity" />
         <activity android:name=".ui.SignupActivity" />
+        <activity android:name=".ui.CycleViewActivity" />
     </application>
 
 </manifest>

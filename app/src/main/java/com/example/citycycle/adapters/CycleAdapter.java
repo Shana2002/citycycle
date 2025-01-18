@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.citycycle.R;
+import com.example.citycycle.helpers.OnCycleClickListener;
 import com.example.citycycle.models.Cycle;
 import com.example.citycycle.models.Promotion;
 
@@ -19,20 +20,20 @@ import java.util.List;
 
 public class CycleAdapter extends RecyclerView.Adapter<CycleAdapter.ViewHolderCycle> {
 
-    // varibales
+    // variables
     List<Cycle> cycles ;
     Context context;
+    OnCycleClickListener listener;
 
-    public CycleAdapter(List<Cycle> cycles,Context context){
-        Log.d("test","hello11111");
+    public CycleAdapter(List<Cycle> cycles, Context context, OnCycleClickListener listener){
         this.cycles = cycles;
         this.context = context;
+        this.listener = listener;
     };
 
     @NonNull
     @Override
     public ViewHolderCycle onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.d("test","hello111dsd11");
         // Inflate the item layout
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_cycle, parent, false);
         return new ViewHolderCycle(view); // Return a new ViewHolder instance
@@ -44,6 +45,8 @@ public class CycleAdapter extends RecyclerView.Adapter<CycleAdapter.ViewHolderCy
         Cycle cycle = cycles.get(position);
         holder.title.setText(cycle.title);
         holder.location.setText(cycle.station);
+
+        holder.itemView.setOnClickListener(v -> listener.onCycleClick(cycle));
     }
 
     @Override
@@ -62,5 +65,7 @@ public class CycleAdapter extends RecyclerView.Adapter<CycleAdapter.ViewHolderCy
             location = itemView.findViewById(R.id.location);
 //            imageView = itemView.findViewById(R.id.imageView);
         }
+
+
     }
 }

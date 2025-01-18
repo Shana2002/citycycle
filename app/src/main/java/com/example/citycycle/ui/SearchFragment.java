@@ -1,5 +1,6 @@
 package com.example.citycycle.ui;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,7 +48,10 @@ public class SearchFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         cycleView.setLayoutManager(layoutManager);
 
-        CycleAdapter cycleAdapter = new CycleAdapter(db.getCycle(null,null,null,true),requireContext());
+        CycleAdapter cycleAdapter = new CycleAdapter(db.getCycle(null,null,null,true),requireContext(),cycle -> {
+            Intent intent = new Intent(requireContext(), CycleViewActivity.class);
+            startActivity(intent);
+        });
         cycleView.setAdapter(cycleAdapter);
     }
 }

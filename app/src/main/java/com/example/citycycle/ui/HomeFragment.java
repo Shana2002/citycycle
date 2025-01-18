@@ -1,5 +1,6 @@
 package com.example.citycycle.ui;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,7 +58,10 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager layoutManagerCycle = new LinearLayoutManager(requireContext());
         recyclerViewCycle.setLayoutManager(layoutManagerCycle);
 
-        CycleAdapter cycleAdapter = new CycleAdapter(db.getCycle(null,null,null,true),requireContext());
+        CycleAdapter cycleAdapter = new CycleAdapter(db.getCycle(null,null,null,true),requireContext(),cycle -> {
+            Intent intent = new Intent(requireContext(), CycleViewActivity.class);
+            startActivity(intent);
+        });
         recyclerViewCycle.setAdapter(cycleAdapter);
     }
 
