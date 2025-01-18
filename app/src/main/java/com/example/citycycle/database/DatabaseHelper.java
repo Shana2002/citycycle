@@ -250,7 +250,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return promotions;
     }
 
-    public List<Cycle> getCycle(String location,String start_date , String end_date , Boolean available){
+    public List<Cycle> getCycle(String location,String start_date , String end_date , Boolean available , Integer id){
         SQLiteDatabase db = this.getReadableDatabase();
 
         String query = "SELECT b.*, s." + COL_STATION_LOCATION +
@@ -273,6 +273,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (available) {
             query += " AND b." + COL_BIKE_STATUS + " = ?";
             args.add("Available");
+        }
+        if (id != null){
+            query += "AND b." + COL_BIKE_ID + " = ?";
+            args.add(String.valueOf(id));
         }
 
         List<Cycle> cycles = new ArrayList<>();

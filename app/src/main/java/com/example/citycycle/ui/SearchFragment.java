@@ -48,8 +48,9 @@ public class SearchFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         cycleView.setLayoutManager(layoutManager);
 
-        CycleAdapter cycleAdapter = new CycleAdapter(db.getCycle(null,null,null,true),requireContext(),cycle -> {
+        CycleAdapter cycleAdapter = new CycleAdapter(db.getCycle(null,null,null,true,null),requireContext(),cycle -> {
             Intent intent = new Intent(requireContext(), CycleViewActivity.class);
+            intent.putExtra("cycle_id",cycle.cycleId);
             startActivity(intent);
         });
         cycleView.setAdapter(cycleAdapter);

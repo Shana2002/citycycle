@@ -1,7 +1,10 @@
 package com.example.citycycle.ui;
 
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
 
 
 import androidx.activity.EdgeToEdge;
@@ -13,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 
 import com.example.citycycle.R;
+import com.example.citycycle.database.DatabaseHelper;
+import com.example.citycycle.models.Cycle;
 
 
 public class CycleViewActivity extends AppCompatActivity {
@@ -27,6 +32,20 @@ public class CycleViewActivity extends AppCompatActivity {
             return insets;
         });
 
+        int cycleId = getIntent().getIntExtra("cycle_id",1);
 
+        DatabaseHelper db = new DatabaseHelper(this);
+        Cycle cycle = db.getCycle(null,null,null,true,cycleId).get(0);
+        Log.d("test",cycle.title);
+
+        // Variables to Assign Values
+        TextView title =  findViewById(R.id.title);
+        TextView location = findViewById(R.id.location);
+        TextView description = findViewById(R.id.description);
+
+
+        title.setText(cycle.title);
+        location.setText(cycle.station);
+        description.setText(cycle.description);
     }
 }
