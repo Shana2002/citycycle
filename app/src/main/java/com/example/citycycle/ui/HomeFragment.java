@@ -56,6 +56,9 @@ public class HomeFragment extends Fragment {
 
         // assign variables values
         username.setText(currentUser.getName());
+        if (currentUser.getImage() != null){
+            userImage.setImageBitmap(currentUser.getImage());
+        }
 
         // promotion view setup
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false);

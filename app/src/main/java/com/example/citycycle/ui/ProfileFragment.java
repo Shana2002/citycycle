@@ -41,14 +41,16 @@ public class ProfileFragment extends Fragment {
         User currentUser = UserSession.getInstance().getUser();
 
         // Variables
-        ImageView userimage = view.findViewById(R.id.userImage);
+        ImageView userImage = view.findViewById(R.id.userImage);
         TextView userText = view.findViewById(R.id.name);
         TextView userEmail = view.findViewById(R.id.email);
 
         // assign vales
         userText.setText(currentUser.getName());
         userEmail.setText(currentUser.getEmail());
-
+        if (currentUser.getImage() != null){
+            userImage.setImageBitmap(currentUser.getImage());
+        }
 
     }
 }
