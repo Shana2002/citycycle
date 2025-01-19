@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/userImage"
         android:layout_width="156dp"
         android:layout_height="150dp"
@@ -15,7 +15,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.072"
-        app:srcCompat="@drawable/profile_circle" />
+        app:srcCompat="@drawable/user_image"
+        app:shapeAppearanceOverlay="@style/CircleImageView"/>
 
     <TextView
         android:id="@+id/username"
@@ -42,5 +43,38 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="231dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="89dp"
+        android:layout_marginBottom="48dp"
+        android:gravity="center"
+        android:text="Log Out"
+        android:background="@drawable/logout_button"
+        android:fontFamily="@font/altehaasgroteskbold"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/history_btn"
+        android:layout_width="411dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="44dp"
+        android:background="@color/secondry"
+        android:fontFamily="@font/altehaasgroteskbold"
+        android:gravity="center"
+        android:text="Rental History"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_email"
+        app:layout_constraintVertical_bias="0.007" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

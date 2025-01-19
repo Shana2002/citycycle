@@ -51,6 +51,5 @@ public class ProfileFragment extends Fragment {
         if (currentUser.getImage() != null){
             userImage.setImageBitmap(currentUser.getImage());
         }
-
     }
 }
