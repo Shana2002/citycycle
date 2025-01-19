@@ -1,5 +1,7 @@
 package com.example.citycycle.ui;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,11 +33,18 @@ import com.example.citycycle.helpers.BikeType;
 import com.example.citycycle.models.Cycle;
 import com.example.citycycle.models.Station;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Stack;
 
 public class SearchFragment extends Fragment {
+
+    EditText fromDate, toDate;
+    final Calendar calendar = Calendar.getInstance();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,6 +77,15 @@ public class SearchFragment extends Fragment {
         Spinner spinnerType = view.findViewById(R.id.spinner_type);
         Spinner spinnerLoc = view.findViewById(R.id.spinner_loc);
         TextView search = view.findViewById(R.id.search_button);
+        fromDate = view.findViewById(R.id.from_date);
+        toDate = view.findViewById(R.id.to_date);
+
+
+
+        fromDate.setOnClickListener(v -> showDatePicker(fromDate,requireContext()));
+
+        // Set up date picker for "To Date"
+        toDate.setOnClickListener(v -> showDatePicker(toDate,requireContext()));
 
         locationAddSpinner(stationList,spinnerLoc);
         typeSpinner(bikeTypeList,spinnerType);
@@ -73,13 +93,14 @@ public class SearchFragment extends Fragment {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String startDate = fromDate.getText().toString().trim();
+                String endDate = toDate.getText().toString().trim();
                 Integer location;
-                String startDate,endDate,type;
+                String type;
                 Boolean available;
                 int selectPositionLocation = spinnerLoc.getSelectedItemPosition();
                 if (selectPositionLocation >0 ){
                     location = stationList.get(selectPositionLocation-1).stationId;
-                    Log.d("test",stationList.get(selectPositionLocation-1).stationName);
                 }else{
                     location = null;
                 }
@@ -92,7 +113,16 @@ public class SearchFragment extends Fragment {
                 else{
                     type = null;
                 }
-                searchResult(db.getCycle(location,type,null,null,true,null),requireContext(),cycleView);
+                if ((!startDate.isEmpty() && endDate.isEmpty()) || (startDate.isEmpty() && !endDate.isEmpty()) ) {
+                    Toast.makeText(requireContext(), "Select date", Toast.LENGTH_SHORT).show();
+                    Log.d("test1", "error");
+                    return;
+                }
+                if (startDate.isEmpty() && endDate.isEmpty()){
+                    startDate = null;
+                    endDate = null;
+                }
+                searchResult(db.getCycle(location,type,startDate,endDate,true,null),requireContext(),cycleView);
             }
         });
         searchResult(db.getCycle(null,null,null,null,true,null),requireContext(),cycleView);
@@ -134,5 +164,21 @@ public class SearchFragment extends Fragment {
             startActivity(intent);
         });
         cycleView.setAdapter(cycleAdapter);
+    }
+
+    private void showDatePicker(final EditText editText,Context context) {
+        new DatePickerDialog(
+                context,
+                (view, year, month, dayOfMonth) -> {
+                    // Set selected date to the EditText
+                    calendar.set(year, month, dayOfMonth);
+                    String format = "yyyy-MM-dd"; // Desired format
+                    SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+                    editText.setText(sdf.format(calendar.getTime()));
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        ).show();
     }
 }

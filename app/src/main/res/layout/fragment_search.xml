@@ -29,6 +29,38 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.539" />
 
+    <EditText
+        android:id="@+id/from_date"
+        android:layout_width="152dp"
+        android:layout_height="38dp"
+        android:drawableRight="@android:drawable/ic_menu_my_calendar"
+        android:focusable="false"
+        android:hint="From Date"
+        android:paddingHorizontal="10dp"
+        android:background="@drawable/entry_white"
+        app:layout_constraintBottom_toTopOf="@+id/search_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/location"
+        app:layout_constraintVertical_bias="0.461" />
+
+    <EditText
+        android:id="@+id/to_date"
+        android:layout_width="152dp"
+        android:layout_height="38dp"
+        android:drawableRight="@android:drawable/ic_menu_my_calendar"
+        android:focusable="false"
+        android:hint="To Date"
+        android:paddingHorizontal="10dp"
+        android:background="@drawable/entry_white"
+        app:layout_constraintBottom_toTopOf="@+id/search_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.892"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_loc"
+        app:layout_constraintVertical_bias="0.461" />
+
     <TextView
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
