@@ -42,8 +42,8 @@ public class ProfileFragment extends Fragment {
 
         // Variables
         ImageView userImage = view.findViewById(R.id.userImage);
-        TextView userText = view.findViewById(R.id.name);
-        TextView userEmail = view.findViewById(R.id.email);
+        TextView userText = view.findViewById(R.id.username);
+        TextView userEmail = view.findViewById(R.id.user_email);
 
         // assign vales
         userText.setText(currentUser.getName());
