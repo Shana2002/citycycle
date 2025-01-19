@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.citycycle.helpers.LoginResult;
 import com.example.citycycle.helpers.UserSession;
 import com.example.citycycle.models.Cycle;
+import com.example.citycycle.models.CycleRental;
 import com.example.citycycle.models.Promotion;
 import com.example.citycycle.models.Station;
 import com.example.citycycle.models.User;
@@ -342,6 +343,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return stationList;
     }
 
+    public boolean AddReservation(CycleRental rental){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_RENTAL_USER_ID,UserSession.getInstance().getUser().getUserId());
+        values.put(COL_RENTAL_START_STATION,rental.station);
+        values.put(COL_RENTAL_END_STATION,rental.endStation);
+        values.put(COL_RENTAL_BIKE_ID,rental.cycleId);
+        values.put(COL_RENTAL_START_TIME,rental.startTime);
+        values.put(COL_RENTAL_END_TIME,rental.endTime);
+        values.put(COL_RENTAL_COST,rental.price);
+        long result = db.insert(TABLE_USERS,null,values);
+
+
+        return result != -1;
+
+
+    }
+
+    public List<CycleRental> rentals (){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT * FROM "+TABLE_RENTALS +"  AS r "+
+                "LEFT JOIN "+TABLE_BIKES+" AS b ON b.bike_id = r.bike_id "+
+                "LEFT JOIN stations AS s On s.station_id = r.station_end_id"+
+                " WHERE r.user_id = ?";
+
+        List<CycleRental> cycleRentals = new ArrayList<>();
+        try (Cursor cursor = db.rawQuery(query,new String[]{String.valueOf(UserSession.getInstance().getUser().getUserId())})){
+            if (cursor.moveToFirst()){
+                do{
+                    int bikeId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_BIKE_ID));
+                    String bikeTitle = cursor.getString(cursor.getColumnIndexOrThrow(COL_BIKE_TITLE));
+                    String bikeDescription = cursor.getString(cursor.getColumnIndexOrThrow(COL_BIKE_DESCRIPTION));
+                    String bikeType = cursor.getString(cursor.getColumnIndexOrThrow(COL_BIKE_TYPE));
+                    String bikeStatus = cursor.getString(cursor.getColumnIndexOrThrow(COL_BIKE_STATUS));
+                    int stationId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_BIKE_STATION_ID));
+                    String stationLocation = cursor.getString(cursor.getColumnIndexOrThrow(COL_STATION_LOCATION));
+                    String imageString = cursor.getString(cursor.getColumnIndexOrThrow(COL_BIKE_IMAGES));
+                    String[] images = imageString.split("[,]");
+                    int startStation = cursor.getInt(cursor.getColumnIndexOrThrow(COL_RENTAL_START_STATION));
+                    int endStation = cursor.getInt(cursor.getColumnIndexOrThrow(COL_RENTAL_END_STATION));
+                    String strTime = cursor.getString(cursor.getColumnIndexOrThrow(COL_RENTAL_START_TIME));
+                    String strEnd = cursor.getString(cursor.getColumnIndexOrThrow(COL_RENTAL_END_TIME));
+                    double cost = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_RENTAL_COST));
+                    CycleRental newCyclerental = new CycleRental(bikeId,bikeTitle,bikeDescription,bikeType,stationLocation,bikeStatus,images,strEnd,strTime,strEnd);
+                    newCyclerental.setCost(cost);
+                    cycleRentals.add(newCyclerental);
+                }while (cursor.moveToNext());
+            }
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        finally {
+            db.close();
+        }
+        return cycleRentals;
+    }
+
     // sample data
 
     private void insertStationData(SQLiteDatabase db) {
@@ -378,7 +437,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(COL_BIKE_TITLE, "Bike " + i);
             values.put(COL_BIKE_DESCRIPTION, "Description for Bike " + i);
             values.put(COL_BIKE_TYPE, bikeTypes[i % bikeTypes.length]); // Alternating bike types
-            values.put(COL_BIKE_STATUS, bikeStatuses[i % bikeStatuses.length]); // Alternating bike statuses
+            values.put(COL_BIKE_STATUS, "Available"); // Alternating bike statuses
             values.put(COL_BIKE_STATION_ID, (i % 10) + 1); // Assigning station IDs between 1 and 10
             values.put(COL_BIKE_IMAGES, "cycle1,");
 

@@ -44,6 +44,10 @@ public class ProfileFragment extends Fragment {
         ImageView userImage = view.findViewById(R.id.userImage);
         TextView userText = view.findViewById(R.id.username);
         TextView userEmail = view.findViewById(R.id.user_email);
+        TextView rentalHistoryBtn = view.findViewById(R.id.history_btn);
+        TextView updateBtn = view.findViewById(R.id.update_profile_btn);
+        TextView paymentOptBtn = view.findViewById(R.id.payment_button);
+        TextView logoutBtn = view.findViewById(R.id.logout_btn);
 
         // assign vales
         userText.setText(currentUser.getName());
@@ -51,5 +55,10 @@ public class ProfileFragment extends Fragment {
         if (currentUser.getImage() != null){
             userImage.setImageBitmap(currentUser.getImage());
         }
+
+
+
     }
+
+    private void buttonClick(){}
 }
