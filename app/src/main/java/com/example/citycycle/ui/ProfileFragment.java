@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.citycycle.R;
 import com.example.citycycle.adapters.CycleAdapter;
 import com.example.citycycle.database.DatabaseHelper;
+import com.example.citycycle.helpers.UserSession;
+import com.example.citycycle.models.User;
 
 public class ProfileFragment extends Fragment {
     @Nullable
@@ -34,5 +38,17 @@ public class ProfileFragment extends Fragment {
             v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom);
             return insets;
         });
+        User currentUser = UserSession.getInstance().getUser();
+
+        // Variables
+        ImageView userimage = view.findViewById(R.id.userImage);
+        TextView userText = view.findViewById(R.id.name);
+        TextView userEmail = view.findViewById(R.id.email);
+
+        // assign vales
+        userText.setText(currentUser.getName());
+        userEmail.setText(currentUser.getEmail());
+
+
     }
 }
