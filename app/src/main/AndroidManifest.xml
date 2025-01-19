@@ -25,5 +25,5 @@
         <activity android:name=".ui.SignupActivity" />
         <activity android:name=".ui.CycleViewActivity" />
     </application>
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 </manifest>

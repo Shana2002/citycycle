@@ -213,6 +213,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
           db.close();
         }
     }
+    public boolean updateUser(User user){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_USER_NAME,user.getName());
+        values.put(COL_USER_PHONE,user.getPhone());
+        values.put(COL_USER_PAYMENT,user.getPaymentInfo());
+
+        String whereClause = "id = ?";
+        String[] whereArgs = {String.valueOf(user.getUserId())};
+
+        int result = db.update(TABLE_USERS,values,whereClause,whereArgs);
+
+        db.close();
+        return result > 0;
+    }
+
+    public boolean changePassword(User user){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_USER_PASSWORD,user.getPassword());
+
+        String whereClause = "id = ?";
+        String[] whereArgs = {String.valueOf(user.getUserId())};
+
+        int result = db.update(TABLE_USERS,values,whereClause,whereArgs);
+
+        db.close();
+        return result > 0;
+    }
+//    public boolean updateProfilePic(User user){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        ContentValues values = new ContentValues();
+//        values.put(COL_USER_IMAGE,user.getImage());
+//
+//        String whereClause = "id = ?";
+//        String[] whereArgs = {String.valueOf(user.getUserId())};
+//
+//        int result = db.update(TABLE_USERS,values,whereClause,whereArgs);
+//
+//        db.close();
+//        return result > 0;
+//    }
 
     public List<Promotion> getPromotions(){
         SQLiteDatabase db = this.getReadableDatabase();

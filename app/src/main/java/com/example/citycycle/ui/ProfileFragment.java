@@ -1,14 +1,21 @@
 package com.example.citycycle.ui;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,7 +29,13 @@ import com.example.citycycle.database.DatabaseHelper;
 import com.example.citycycle.helpers.UserSession;
 import com.example.citycycle.models.User;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 public class ProfileFragment extends Fragment {
+    private static final int PICK_IMAGE_REQUEST = 1;
+    ImageView userImage;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,7 +54,7 @@ public class ProfileFragment extends Fragment {
         User currentUser = UserSession.getInstance().getUser();
 
         // Variables
-        ImageView userImage = view.findViewById(R.id.userImage);
+        userImage = view.findViewById(R.id.userImage);
         TextView userText = view.findViewById(R.id.username);
         TextView userEmail = view.findViewById(R.id.user_email);
         TextView rentalHistoryBtn = view.findViewById(R.id.history_btn);
@@ -56,9 +69,41 @@ public class ProfileFragment extends Fragment {
             userImage.setImageBitmap(currentUser.getImage());
         }
 
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == AppCompatActivity.RESULT_OK && result.getData() != null) {
+                        Uri imageUri = result.getData().getData();
+                        handleSelectedImage(imageUri);
+                    }
+                }
+        );
 
+        // Set click listener for the logout button to open the gallery
+        logoutBtn.setOnClickListener(view1 -> {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            imagePickerLauncher.launch(intent);
+        });
 
     }
 
-    private void buttonClick(){}
+    private void handleSelectedImage(Uri imageUri) {
+        try {
+            // Convert URI to Bitmap
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
+
+            // Display selected image
+            userImage.setImageBitmap(bitmap);
+
+            // Convert Bitmap to byte array if needed (e.g., for database storage)
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            byte[] imageBlob = outputStream.toByteArray();
+
+            // Save imageBlob to database or perform other actions
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
