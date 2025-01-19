@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +23,9 @@ import com.example.citycycle.R;
 import com.example.citycycle.adapters.CycleAdapter;
 import com.example.citycycle.adapters.PromotionViewAdapterHorizontal;
 import com.example.citycycle.database.DatabaseHelper;
+import com.example.citycycle.helpers.UserSession;
 import com.example.citycycle.helpers.VerticalSpaceItemDecoration;
+import com.example.citycycle.models.User;
 
 public class HomeFragment extends Fragment {
     @Nullable
@@ -43,9 +47,15 @@ public class HomeFragment extends Fragment {
         DatabaseHelper db = new DatabaseHelper(requireContext());
         SQLiteDatabase sql = db.getReadableDatabase();
 
-        // recycle views
+        User currentUser = UserSession.getInstance().getUser();
+        // Variables
+        ImageView userImage = view.findViewById(R.id.userImage);
+        TextView username = view.findViewById(R.id.name);
         RecyclerView recyclerViewPromotion = view.findViewById(R.id.promtion_view);
         RecyclerView recyclerViewCycle = view.findViewById(R.id.cycle_view);
+
+        // assign variables values
+        username.setText(currentUser.getName());
 
         // promotion view setup
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false);

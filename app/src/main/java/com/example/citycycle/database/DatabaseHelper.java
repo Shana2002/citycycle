@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.citycycle.helpers.LoginResult;
+import com.example.citycycle.helpers.UserSession;
 import com.example.citycycle.models.Cycle;
 import com.example.citycycle.models.Promotion;
 import com.example.citycycle.models.Station;
@@ -169,6 +170,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String storedPassword = cursor.getString(cursor.getColumnIndexOrThrow(COL_USER_PASSWORD));
 //                check password correct or  not
                 if (user.getPassword().equals(storedPassword)){
+                    User currentUser = getLoginUserDetails(user.getEmail());
+                    if (currentUser != null){
+                        UserSession.getInstance().setUser(currentUser);
+                    }
                     return LoginResult.SUCCESS;
                 }
                 else{
