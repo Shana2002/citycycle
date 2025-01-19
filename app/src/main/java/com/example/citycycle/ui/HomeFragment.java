@@ -53,12 +53,11 @@ public class HomeFragment extends Fragment {
         PromotionViewAdapterHorizontal adapter = new PromotionViewAdapterHorizontal(db.getPromotions(),requireContext());
         recyclerViewPromotion.setAdapter(adapter);
 
-        Log.d("test",String.valueOf(db.getCycle(null,null,null,true,null).size()));
         // cycle view setup
         LinearLayoutManager layoutManagerCycle = new LinearLayoutManager(requireContext());
         recyclerViewCycle.setLayoutManager(layoutManagerCycle);
 
-        CycleAdapter cycleAdapter = new CycleAdapter(db.getCycle(null,null,null,true,null),requireContext(),cycle -> {
+        CycleAdapter cycleAdapter = new CycleAdapter(db.getCycle(null,null,null,null,true,null),requireContext(),cycle -> {
             Intent intent = new Intent(requireContext(), CycleViewActivity.class);
             intent.putExtra("cycle_id",cycle.cycleId);
             startActivity(intent);

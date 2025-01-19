@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.citycycle.helpers.LoginResult;
 import com.example.citycycle.models.Cycle;
 import com.example.citycycle.models.Promotion;
+import com.example.citycycle.models.Station;
 import com.example.citycycle.models.User;
 
 import java.sql.Blob;
@@ -250,7 +251,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return promotions;
     }
 
-    public List<Cycle> getCycle(String location,String start_date , String end_date , Boolean available , Integer id){
+    public List<Cycle> getCycle(Integer location,String type,String start_date , String end_date , Boolean available , Integer id){
         SQLiteDatabase db = this.getReadableDatabase();
 
         String query = "SELECT b.*, s." + COL_STATION_LOCATION +
@@ -262,9 +263,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<String> args = new ArrayList<>();
 
         if (location != null) {
-            query += " AND s." + COL_STATION_LOCATION + " = ?";
-            args.add(location);
+            query += " AND s." + COL_STATION_ID + " = ?";
+            args.add(String.valueOf(location));
         }
+        if (type != null){
+            query += " AND b." + COL_BIKE_TYPE + " = ?";
+            args.add(type);
+        }
+
         if (start_date != null && end_date != null) {
             query += " AND (r." + COL_RENTAL_END_TIME + " IS NULL OR (r." + COL_RENTAL_END_TIME + " < ? OR r." + COL_RENTAL_START_TIME + " > ?))";
             args.add(end_date);
@@ -304,6 +310,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
         return cycles;
+    }
+
+    // get Station data
+    public List<Station> getStations(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT * FROM "+ TABLE_STATIONS;
+
+        List<Station> stationList = new ArrayList<>();
+        try (Cursor cursor = db.rawQuery(query,new String[]{})){
+            if (cursor.moveToFirst()){
+                do{
+                    int stationId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_STATION_ID));
+                    String stationName = cursor.getString(cursor.getColumnIndexOrThrow(COL_STATION_NAME));
+                    String location = cursor.getString(cursor.getColumnIndexOrThrow(COL_STATION_LOCATION));
+                    stationList.add(new Station(stationId,stationName,location));
+                }while (cursor.moveToNext());
+            }
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        finally {
+            db.close();
+        }
+        return stationList;
     }
 
     // sample data

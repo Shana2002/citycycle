@@ -18,7 +18,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Spinner
-        android:id="@+id/spinner1"
+        android:id="@+id/spinner_loc"
         android:layout_width="240dp"
         android:layout_height="31dp"
         android:background="@drawable/entry_white"
@@ -38,14 +38,14 @@
         android:textColor="@color/black"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintEnd_toStartOf="@+id/spinner"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_type"
         app:layout_constraintHorizontal_bias="0.304"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.33" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spinner_type"
         android:layout_width="240dp"
         android:layout_height="31dp"
         android:background="@drawable/entry_white"
@@ -65,14 +65,14 @@
         android:textColor="@color/black"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintEnd_toStartOf="@+id/spinner"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_type"
         app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.539" />
 
     <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/search_button"
         android:layout_width="342dp"
         android:layout_height="34dp"
         android:background="@drawable/primary_button"

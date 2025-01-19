@@ -35,7 +35,7 @@ public class CycleViewActivity extends AppCompatActivity {
         int cycleId = getIntent().getIntExtra("cycle_id",1);
 
         DatabaseHelper db = new DatabaseHelper(this);
-        Cycle cycle = db.getCycle(null,null,null,true,cycleId).get(0);
+        Cycle cycle = db.getCycle(null,null,null,null,true,cycleId).get(0);
         Log.d("test",cycle.title);
 
         // Variables to Assign Values
