@@ -79,4 +79,8 @@ public class User {
             return null;
         }
     }
+
+    public byte[] getImageBlob(){
+        return image;
+    }
 }
