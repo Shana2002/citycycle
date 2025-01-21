@@ -132,9 +132,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createPromotionTable);
 
         insertStationData(db);
-        insertBikeData(db);
+//        insertBikeData(db);
         insertSampleData(db);
-
+        insertBikeRowData(db);
     }
 
     @Override
@@ -517,6 +517,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(insertSampleData1);
         db.execSQL(insertSampleData2);
         Log.d("Promotion","created");
+    }
+
+    private void insertBikeRowData(SQLiteDatabase db){
+        String insterQuery = "INSERT INTO "+TABLE_BIKES+" ("+COL_BIKE_TITLE+", "+ COL_BIKE_DESCRIPTION +", "+ COL_BIKE_TYPE +", "+ COL_BIKE_STATUS +" ,"+COL_BIKE_STATION_ID+","+COL_BIKE_IMAGES+") VALUES\n" +
+                "('City Bike 01', 'This City Bike is perfect for daily commuting, offering a smooth, comfortable ride. Its lightweight design and durable frame make it ideal for navigating busy urban streets with ease.', 'City Bike', 'Available', 1, 'cycle1,'),\n" +
+                "('City Bike 02', 'Designed for urban riders, this City Bike combines reliability and functionality. Its ergonomic design ensures a comfortable journey, whether you’re commuting or enjoying a leisurely ride.', 'City Bike', 'Available', 2, 'cycle1,'),\n" +
+                "('Single Gear Bike 01', 'The Single Gear Bike is lightweight and straightforward, ideal for riders who prefer simplicity and efficiency. Its sleek frame is perfect for flat terrains and short trips.', 'Single Gear Bike', 'Available', 3, 'cycle1,'),\n" +
+                "('Single Gear Bike 02', 'Built for simplicity, this Single Gear Bike provides an effortless and smooth ride. It is low maintenance and perfect for casual riders and city commuters.', 'Single Gear Bike', 'Available', 4, 'cycle1,'),\n" +
+                "('Electric Bike 01', 'This Electric Bike offers an eco-friendly and powerful way to travel. With its electric assist, you can enjoy longer rides without effort, ideal for city commuting.', 'Electric Bike', 'Available', 5, 'cycle1,'),\n" +
+                "('Electric Bike 02', 'Perfect for modern commuters, the Electric Bike features a powerful motor and a long-lasting battery. It’s an excellent choice for efficient and sustainable urban travel.', 'Electric Bike', 'Available', 6, 'cycle1,'),\n" +
+                "('Ladies Bike 01', 'Stylish and comfortable, this Ladies Bike is designed for everyday use. Its lightweight frame and ergonomic design provide an enjoyable and relaxed riding experience.', 'Ladies Bike', 'Available', 7, 'cycle1,'),\n" +
+                "('Ladies Bike 02', 'The Ladies Bike combines elegance and practicality. Perfect for casual rides or commutes, it features a comfortable seat and an easy-to-handle frame.', 'Ladies Bike', 'Available', 8, 'cycle1,'),\n" +
+                "('City Bike 03', 'This City Bike is the ultimate choice for navigating busy urban streets. It is lightweight, durable, and designed for both comfort and practicality.', 'City Bike', 'Available', 9, 'cycle1,'),\n" +
+                "('City Bike 04', 'Experience the perfect blend of style and function with this City Bike. Its durable frame and smooth handling make it ideal for city travel.', 'City Bike', 'Available', 10, 'cycle1,'),\n" +
+                "('Single Gear Bike 03', 'Efficient and easy to ride, this Single Gear Bike is great for beginners and casual riders. It is lightweight and requires minimal maintenance.', 'Single Gear Bike', 'Available', 1, 'cycle1,'),\n" +
+                "('Single Gear Bike 04', 'This Single Gear Bike is perfect for quick commutes and leisurely rides. It is simple yet efficient, offering a hassle-free cycling experience.', 'Single Gear Bike', 'Available', 2, 'cycle1,'),\n" +
+                "('Electric Bike 03', 'This advanced Electric Bike combines technology and comfort. It features a reliable motor for effortless commuting, making it perfect for eco-conscious riders.', 'Electric Bike', 'Available', 3, 'cycle1,'),\n" +
+                "('Electric Bike 04', 'With its sleek design and electric assist, this Electric Bike ensures a smooth and enjoyable ride. Ideal for city commuters looking for convenience and speed.', 'Electric Bike', 'Available', 4, 'cycle1,'),\n" +
+                "('Ladies Bike 03', 'The Ladies Bike is a practical choice for urban and recreational rides. Its lightweight frame and stylish design make it both functional and attractive.', 'Ladies Bike', 'Available', 5, 'cycle1,'),\n" +
+                "('Ladies Bike 04', 'Comfort and elegance come together in this Ladies Bike. Designed with women in mind, it provides a smooth ride for daily commutes or casual trips.', 'Ladies Bike', 'Available', 6, 'cycle1,'),\n" +
+                "('City Bike 05', 'Navigate the city streets with this versatile City Bike. Built for comfort and durability, it’s a great choice for commuters and leisure riders alike.', 'City Bike', 'Available', 7, 'cycle1,'),\n" +
+                "('Single Gear Bike 05', 'This Single Gear Bike is perfect for minimalist riders. Its lightweight build and efficient design make it an excellent option for short, flat terrain rides.', 'Single Gear Bike', 'Available', 8, 'cycle1,'),\n" +
+                "('Electric Bike 05', 'Eco-friendly and efficient, this Electric Bike is great for urban explorers. Its electric motor makes long-distance travel effortless and enjoyable.', 'Electric Bike', 'Available', 9, 'cycle1,'),\n" +
+                "('Ladies Bike 05', 'A stylish and comfortable option, this Ladies Bike is designed for daily use. Its ergonomic build ensures a smooth ride on any city route.', 'Ladies Bike', 'Available', 10, 'cycle1,');\n";
+
+        db.execSQL(insterQuery);
     }
 }
 
