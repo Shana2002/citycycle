@@ -5,11 +5,13 @@ public class CycleRental extends Cycle{
     public String startTime;
     public String endTime;
     public String paymentType;
+    public int endStationId;
     public double cost;
     public double price;
 
-    public CycleRental(int cycleId,String title ,String description,String type,String station , String status,String[] images,String endStation,String startTime,String endTime){
-        super(cycleId,title,description,type,station,status,images);
+    public CycleRental(Cycle cycle,String endStation,String startTime,String endTime){
+        super(cycle.cycleId, cycle.title, cycle.description,
+                cycle.type.toString(), cycle.station, cycle.status.toString(), cycle.images);
         this.endStation = endStation;
         this.startTime = startTime;
         this.endTime = endTime;

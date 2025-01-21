@@ -4,10 +4,12 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +30,16 @@ import java.util.Locale;
 
 public class RentNowActivity extends AppCompatActivity {
 
+    DatabaseHelper db;
+    int cycleId;
+    boolean canRent = false;
+    TextView startLoc ;
+    TextView bikeName ;
+    Spinner endLoc ;
+    EditText startTime ;
+    EditText endTime ;
+    TextView price ;
+    TextView rentButton;
     final Calendar calendar = Calendar.getInstance();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,18 +51,19 @@ public class RentNowActivity extends AppCompatActivity {
             return insets;
         });
 
-        int cycleId = getIntent().getIntExtra("cycle_id",1);
+        cycleId = getIntent().getIntExtra("cycle_id",1);
 
-        DatabaseHelper db = new DatabaseHelper(this);
+        db = new DatabaseHelper(this);
         Cycle cycle = db.getCycle(null,null,null,null,true,cycleId).get(0);
         List<Station> stationList =  db.getStations();
 
-        TextView startLoc = findViewById(R.id.start_loc);
-        TextView bikeName = findViewById(R.id.bike_name);
-        Spinner endLoc = findViewById(R.id.end_loc_spinner);
-        EditText startTime = findViewById(R.id.start_time);
-        EditText endTime = findViewById(R.id.end_date_select);
-        TextView price = findViewById(R.id.amount);
+        startLoc = findViewById(R.id.start_loc);
+        bikeName = findViewById(R.id.bike_name);
+        endLoc = findViewById(R.id.end_loc_spinner);
+        startTime = findViewById(R.id.start_time);
+        endTime = findViewById(R.id.end_date_select);
+        price = findViewById(R.id.amount);
+        rentButton = findViewById(R.id.rent_btn);
 
         // assigning
         startLoc.setText(cycle.station);
@@ -61,6 +74,17 @@ public class RentNowActivity extends AppCompatActivity {
 
         // Set up date picker for "To Date"
         endTime.setOnClickListener(v -> showDatePicker(endTime,this));
+
+        rentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (canRent){
+
+                }else{
+                    Toast.makeText(RentNowActivity.this, "This cycle not available for that time range. Choose different date time or another cycle", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public void locationAddSpinner(List<Station> stationList,Spinner spinner){
@@ -93,5 +117,33 @@ public class RentNowActivity extends AppCompatActivity {
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
         ).show();
+        checkFields();
+    }
+
+    private void checkFields(){
+        if (startTime.getText().toString().isEmpty() || endTime.getText().toString().isEmpty()){
+            canRent = false;
+            setRentButtonColor();
+        }
+        else{
+            List<Cycle> cycles = db.getCycle(null,null,startTime.getText().toString(),endTime.getText().toString(),true,cycleId);
+            if (cycles.isEmpty()){
+                Toast.makeText(this, "This cycle not available for that time range", Toast.LENGTH_SHORT).show();
+                canRent = false;
+                setRentButtonColor();
+            }
+            else {
+                canRent = true;
+                setRentButtonColor();
+            }
+        }
+    }
+    private void setRentButtonColor(){
+        if (canRent){
+            rentButton.setBackgroundResource(R.drawable.primary_button);
+        }
+        else{
+            rentButton.setBackgroundResource(R.drawable.button_disable);
+        }
     }
 }

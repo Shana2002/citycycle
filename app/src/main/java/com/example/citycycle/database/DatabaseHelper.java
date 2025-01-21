@@ -429,8 +429,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     String strTime = cursor.getString(cursor.getColumnIndexOrThrow(COL_RENTAL_START_TIME));
                     String strEnd = cursor.getString(cursor.getColumnIndexOrThrow(COL_RENTAL_END_TIME));
                     double cost = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_RENTAL_COST));
-                    CycleRental newCyclerental = new CycleRental(bikeId,bikeTitle,bikeDescription,bikeType,stationLocation,bikeStatus,images,strEnd,strTime,strEnd);
+                    Cycle newCycle = new Cycle(bikeId,bikeTitle,bikeDescription,bikeType,stationLocation,bikeStatus,images);
+                    CycleRental newCyclerental = new CycleRental(newCycle,strEnd,strTime,strEnd);
                     newCyclerental.setCost(cost);
+                    newCyclerental.endStationId = endStation;
                     cycleRentals.add(newCyclerental);
                 }while (cursor.moveToNext());
             }
