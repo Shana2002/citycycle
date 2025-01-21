@@ -62,6 +62,15 @@ public class ProfileFragment extends Fragment {
         TextView paymentOptBtn = view.findViewById(R.id.payment_button);
         TextView logoutBtn = view.findViewById(R.id.logout_btn);
 
+
+        updateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(requireContext(), UpdateProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // assign vales
         userText.setText(currentUser.getName());
         userEmail.setText(currentUser.getEmail());
