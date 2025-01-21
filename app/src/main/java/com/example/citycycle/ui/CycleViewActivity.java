@@ -1,9 +1,11 @@
 package com.example.citycycle.ui;
 
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 
@@ -42,10 +44,21 @@ public class CycleViewActivity extends AppCompatActivity {
         TextView title =  findViewById(R.id.title);
         TextView location = findViewById(R.id.location);
         TextView description = findViewById(R.id.description);
+        TextView rent_btn = findViewById(R.id.rent_btn);
 
 
         title.setText(cycle.title);
         location.setText(cycle.station);
         description.setText(cycle.description);
+
+
+        rent_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CycleViewActivity.this, RentNowActivity.class);
+                intent.putExtra("cycle_id",cycle.cycleId);
+                startActivity(intent);
+            }
+        });
     }
 }
